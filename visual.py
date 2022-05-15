@@ -1,9 +1,11 @@
 def main():
   # Standard Library
-  import os, sys, argparse
+  import sys, argparse
   # Project files
   import textification, vid2text, pencil, config, support, readOutFiles, interactions, imageEdit, fileReader, listener
-
+  '''
+  File that takes in user input + applies defaults when needed from config. Read README.md
+  '''
   parser = argparse.ArgumentParser(description='Convert applicable file formats into color text.')
   parser.add_argument('-o', metavar='outfile', type=str, dest='outfile', help='Specify where the output will go. By default, this is the infile with the extention renamed to \'.txt\'')
   parser.add_argument('-c', metavar='bounds', type=int, dest='coords', nargs=2, help='Manually define the image bounds for x and y.\nBy default, this is your window size.')
@@ -25,52 +27,64 @@ def main():
   parser.add_argument('--noinput', action='store_true', help='Disable user input. Helpful when you don\'t want the listener thread active.')
   parser.add_argument('--size', action='store_true', help='Utility option to print the image size and exit.')
   parser.add_argument('-i',action='store_true', help='Interact with an image besides just printing it.')
-  parser.add_argument('--read',action='store_true', help='Read a textified image instead of converting one.')
+  parser.add_argument('--read',action='store_true', help='Read a textified image instead of converting one. You may need to specify the pixels used.')
   parser.add_argument('infile', type=str, help='File to convert and its path, starting from the directory this file is located in.')
+  parser.add_argument('--noheightlimit',action='store_true',help='Remove restrictions on the Y-Value for an image.')
   args = parser.parse_args()
 
-  if args.read: 
-    pencil.readFromFile(args.infile)
-    sys.exit(0)
+  # Read textified image, exit
+  if args.read: readOutFiles.readFile(args.infile,args.pixels); sys.exit(0)
 
+  # Remove FPS cap read from videos
   if args.fastplay: args.nofpslimit = True
   else: args.nofpslimit = False
 
+  # Provide information to the user on request
   if args.size: print('Size:',fileReader.handleImage(args.infile).size); sys.exit(0)
   if args.data: print('Size:',fileReader.getData(args.infile)); sys.exit(0)
 
+  # Choose a cropped region of user specification
   if args.crop != None: imageEdit.crop(args)
 
-  if args.outfile == None: args.outfile = args.infile[:args.infile.rfind('.')] + '.txt'
+  # Images can be uncapped on a y-level usually on user request and still be readable with scrolling
+  # For best results, zoom terminal out fully before executing for high res image in terminal.
   if args.coords  == None: args.coords  = pencil.getBounds()
+  if args.noheightlimit:   args.coords  = (args.coords[0],99999)
+
+  if args.outfile == None: args.outfile = args.infile[:args.infile.rfind('.')] + '.txt'
   if args.pixels  == None: args.pixels  = config.pixels
   if args.level   == None: args.level   = support.getSupport()
-  if args.type    == None: args.type    = 'image'
   if args.start   == None: args.start   = 0
   if args.optimize == None: args.optimize = 4
 
+  # Adjust the pixel ratio based on how many pixels are in args.pixels
   args.pixelRatio = (config.pixelRatio[0]/len(args.pixels),config.pixelRatio[1])
 
+  # Textify the image at a size of the original resolution, not the terminal
   if args.m: args.coords = fileReader.handleImage(args.infile).size
   print(args.coords)
 
-
+  # Get image format
   format = (args.infile.split('.'))
   format = format[len(format)-1]
-  if format == 'gif': args.type = 'video'
+  if args.type == None:
+    if format == 'gif': args.type = 'video'
+    else: args.type = 'image'
 
+  # Using image type and other args, do the stuff (finally, sheesh)
   if args.type == 'image':
-
-      if args.i:
+      if args.i: # Interactive image viewing mode
         if args.noinput != True: listener.thread.start()
         interactions.imageSession(args)
         sys.exit(0)
 
+      # Classic image printing mode
       image = textification.image_to_ASCII(args)
       pencil.writeToFile(image,args.outfile)
       if args.noimg == False:
-        pencil.write(image,'')
+        readOutFiles.readFile(args.outfile,args.pixels)
 
+  # Video player
   elif args.type == 'video':
     if args.noinput != True: listener.thread.start()
     if args.loop:

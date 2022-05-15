@@ -1,10 +1,16 @@
 
 # Where you want stuff to go.
-stem = "./images/"
-out  = "./text/"
-tmp  = "./tmp/"
-saved = "./saved/"
-palettes = "./palettes/"
+#stem = "./images/"
+#out  = "./text/"
+#tmp  = "./tmp/"
+#saved = "./saved/"
+#palettes = "./palettes/"
+
+stem = '.'
+out  = '.'
+tmp  = '.'
+saved = '.'
+palettes = './palettes/'
 
 # Provides the palette for 256 color mode
 file256 = palettes+"256.txt"
@@ -17,7 +23,7 @@ resetColor = "\x1b[0m"
 
 # Interactive session controls
 move = ('w','a','s','d')
-moveScale = 0.05 # How far you move by w/h * scale. (eg. 0.1 = 1/10th of the image at a time.)
+moveScale = 0.01 # How far you move by w/h * scale. (eg. 0.1 = 1/10th of the image at a time.)
 moveDirs = ('up','left','down','right')
 
 
