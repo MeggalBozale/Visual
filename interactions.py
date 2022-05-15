@@ -1,7 +1,4 @@
-import textification, sys, os, pencil, imageEdit, listener, config, fileReader
-
-def p(t,e=config.newln):
-    pencil.write(t,e)
+import textification, pencil, imageEdit, listener, config, fileReader, readOutFiles
 
 def writeImage(image,args,coords):
     newImg = fileReader.handleImage(image)
@@ -10,7 +7,7 @@ def writeImage(image,args,coords):
     newImg = textification.image_to_ASCII(args)
     pencil.write(newImg)
     pencil.write(f"Quit: {config.quit.upper()} | Shift view: {config.move} | Zoom: {config.zoom} |")
-    pencil.write(f"Coords: {coords} | Save: {config.save} |")
+    pencil.write(f"Coords: {coords} | Save: {config.save} | Color Level: {args.level}")
 
 def saveImage(image,args,coords):
     newImg = fileReader.handleImage(image)
@@ -37,7 +34,7 @@ def isUsable(userInput):
     for i in usable:
         if i == userInput:
             return True
-    if userInput != '': p("Invalid Input.")
+    if userInput != '': pencil.write("Invalid Input.")
     return False
 
 def zoomImg(c,z,change,mC):
@@ -49,38 +46,15 @@ def zoomImg(c,z,change,mC):
     nC = (c[0]+sX,c[1]+sY,c[2]-sX,c[3]-sY)
     return nC
 
-    #
-    #width  = maxCoords[2] - maxCoords[0]
-    #height = maxCoords[3] - maxCoords[1]
-    #p(f"{width},{height}")
-    #shiftX, shiftY = (width*zoom)/2, (height*zoom)/2
-    #newCoords =  (coords[0]+shiftX,coords[1]+shiftY,coords[2]-shiftX,coords[3]-shiftY)
-    ## Sanity check
-    #if change > 0: # zooming in
-    #    if (coords[2] - coords[0] <= 5) or (coords[3] - coords[1] <= 5): return coords
-    #if change < 0: # zooming out
-    #    if (newCoords[0] < maxCoords[0]) or (newCoords[1] < maxCoords[1]): return coords
-    #    if (newCoords[2] > maxCoords[2]) or (newCoords[3] > maxCoords[3]): return coords
-    #return newCoords
-
 def translate(coords,x,y):
     return (coords[0]+x,coords[1]+y,coords[2]+x,coords[3]+y)
 
 def doShift(coords,shiftX,shiftY):
-    # take coordinates and the direction to shift
-    # return new coordinates shifted by a fractional amount of the width or height
-    # (x1,y1,x2,y2)
-    # for diagonals add two directions to string dir
     width  = coords[2] - coords[0]
     height = coords[3] - coords[1]
-    #x,y = 0,0
-    #if 'up'    in dir: y *= height * config.moveScale * -1
-    #if 'down'  in dir: y *= height * config.moveScale
-    #if 'left'  in dir: x *= width  * config.moveScale * -1
-    #if 'right' in dir: x *= width  * config.moveScale
     x = shiftX * width  * config.moveScale
     y = shiftY * height * config.moveScale
-    p(f"Before: {coords} | After: {translate(coords,x,y)}")
+    pencil.write(f"Before: {coords} | After: {translate(coords,x,y)}")
     return translate(coords,x,y)
 
 

@@ -49,6 +49,7 @@ pixels = '██' # █
 escapeChr = '\x1b'
 pixelRatio = (1,1) # x per y
 listen = True # listen to keyboard inputs
+colorFile = 'colorlevel_save.txt'
 
 colors = [ # Many terminals change the first 16 colors. Adjust this to your liking! (TODO: automatically detect colors in this range)
 (  0,  0,  0), # 1-8 (Standard)

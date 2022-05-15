@@ -3,10 +3,10 @@
 import os, pickMono, pickLow, pick256, pick24bit, config
 
 def color(rgb,text,support,end=config.resetColor,background = False):
-  if   support == 4: return pick24bit.color(rgb,text,      end,background)
-  elif support == 3: return   pick256.color(rgb,text,False,end,background)
-  elif support == 2: return   pickLow.color(rgb,text,      end,background,16)
-  elif support == 1: return   pickLow.color(rgb,text,      end,background, 8)
+  if   support == 4: return pick24bit.color(rgb,text,end=end,back=background)
+  elif support == 3: return   pick256.color(rgb,text,end=end,back=background)
+  elif support == 2: return pickLow.color16(rgb,text,end=end,back=background)
+  elif support == 1: return  pickLow.color8(rgb,text,end=end,back=background)
   else:              return  pickMono.color(rgb,text)
 
 def write(input,end=config.newln):

@@ -60,9 +60,9 @@ def main():
     removeWhenDone = True
   
   if args.pixels  == None: args.pixels  = config.pixels
-  if args.level   == None: args.level   = support.getSupport()
+  if args.level   == None: args.level   = support.getSupport(args.os); print(f"{args.level}")
   if args.start   == None: args.start   = 0
-  if args.optimize == None: args.optimize = 4
+  if args.optimize == None: args.optimize = 0
 
   # Adjust the pixel ratio based on how many pixels are in args.pixels
   args.pixelRatio = (config.pixelRatio[0]/len(args.pixels),config.pixelRatio[1])

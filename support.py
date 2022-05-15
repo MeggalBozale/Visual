@@ -6,10 +6,11 @@ https://unix.stackexchange.com/questions/172548/how-to-determine-the-current-col
 import sys, config, colorTest
 
 def getSupport(operatingSystem):
+    print(f"{operatingSystem}")
     if operatingSystem == 'Linux':
-        firstTimeSetup()
+        return getColorLevel(config.colorFile)
     elif operatingSystem == 'Windows':
-        firstTimeSetup()
+        return getColorLevel(config.colorFile)
     elif operatingSystem == 'Darwin':
         if config.warnMacOS:
             print("HEY!!!")
@@ -24,27 +25,35 @@ def getSupport(operatingSystem):
     else:
         print("OS not recognized. Inserting snarky developer comment and exiting...")
         sys.exit(0)
-    return 4 # this is a fallback in case something goes absolutely, horribly wrong (not uncommon)
 
-def firstTimeSetup():
-    colorFile = 'colorlevel_save.txt'
+def compare(level1,level2,colorFile):
+    print("Do those color squares look different?")
+    print(colorTest.genColors(level1))
+    print(colorTest.genColors(level2))
+    if input("(Y/N): ").lower() == 'y':
+        print(f"Setting color level to {level1}.")
+        with open(colorFile,'w') as file:
+            file.write(str(level1))
+        return
+
+def getColorLevel(colorFile):
     try:
         with open(colorFile,'x') as file:
             pass
-    except:
+    except Exception:
         with open(colorFile,'r') as file:
             contents = file.read()
-            print(contents)
-            return
+            if contents != '': return int(contents[0])
+    firstTimeSetup(colorFile)
+
+def firstTimeSetup(colorFile):
     print("No color level detected in colorlevel_save.txt!")
     print("It is likely the file was either deleted or made empty.")
     print("Sets of testing colors will be printed out and you will determine if they are colored correctly.")
-    print(colorTest.genColors(4))
-    print("Do those colors look to change on a smooth gradient?")
-    if input("(Y/N): ").lower() == 'y':
-        print("Setting color level to 4.")
-        with open(colorFile,'w') as file:
-            file.write('4')
-        return
-    print("Ok. How about these?")
+    comparisons = ((4,3),(3,2),(2,1),(1,0))
+    for i in comparisons: compare(i[0],i[1],colorFile)
+    print("Setting color level to 0.")
+    with open(colorFile,'w') as file:
+        file.write('0')
+    return
     

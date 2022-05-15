@@ -31,7 +31,6 @@ def reduce2fit(image,max,pixRatio=(1,1)):
 def image_to_ASCII(args):
   ##### Handle args
   functArgs = args
-  if functArgs.level == None: functArgs = support.getSupport()
   if functArgs.s: 
     newImage = config.tmp+'saturated.png'
     imageObj = saturateImg(functArgs.infile,newImage)
