@@ -1,11 +1,5 @@
-  __      _______  _____ _    _         _      
-  \ \    / /_   _|/ ____| |  | |  /\   | |     
-   \ \  / /  | | | (___ | |  | | /  \  | |     
-    \ \/ /   | |  \___ \| |  | |/ /\ \ | |     
-     \  /   _| |_ ____) | |__| / ____ \| |____ 
-      \/   |_____|_____/ \____/_/    \_\______|
+![VISUAL](textifiedLogo.png)
   
-
   # What is VISUAL?
   VISUAL is a indie python project for viewing fairly common images and gifs in the command line terminal. It has many customizable options (seen below) and even an interactive image viewing mode! More is surely to come.
 
