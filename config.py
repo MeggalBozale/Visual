@@ -34,6 +34,8 @@ moveScale = 0.1
 moveDirs = ('upleft','up','upright','left','right','downleft','down','downright')
 '''
 
+# Warn mac users that I don't use mac and thus dont care
+warnMacOS = True
 
 zoom = ('i','o')
 zoomDirs = ('+','-')
@@ -44,7 +46,7 @@ quit = 'q'
 
 # Misc
 pixels = '██' # █
-escapeChr = '\e'
+escapeChr = '\x1b'
 pixelRatio = (1,1) # x per y
 listen = True # listen to keyboard inputs
 

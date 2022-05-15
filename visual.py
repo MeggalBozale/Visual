@@ -1,6 +1,6 @@
 def main():
   # Standard Library
-  import sys, argparse
+  import os, sys, argparse, platform
   # Project files
   import textification, vid2text, pencil, config, support, readOutFiles, interactions, imageEdit, fileReader, listener
   '''
@@ -32,6 +32,9 @@ def main():
   parser.add_argument('--noheightlimit',action='store_true',help='Remove restrictions on the Y-Value for an image.')
   args = parser.parse_args()
 
+  # Get the os
+  args.os = platform.system() # "Linux", "Darwin" (Mac/Apple), "Windows"
+
   # Read textified image, exit
   if args.read: readOutFiles.readFile(args.infile,args.pixels); sys.exit(0)
 
@@ -51,7 +54,11 @@ def main():
   if args.coords  == None: args.coords  = pencil.getBounds()
   if args.noheightlimit:   args.coords  = (args.coords[0],99999)
 
-  if args.outfile == None: args.outfile = args.infile[:args.infile.rfind('.')] + '.txt'
+  removeWhenDone = False
+  if args.outfile == None: 
+    args.outfile = args.infile[:args.infile.rfind('.')] + '.txt'
+    removeWhenDone = True
+  
   if args.pixels  == None: args.pixels  = config.pixels
   if args.level   == None: args.level   = support.getSupport()
   if args.start   == None: args.start   = 0
@@ -81,8 +88,9 @@ def main():
       # Classic image printing mode
       image = textification.image_to_ASCII(args)
       pencil.writeToFile(image,args.outfile)
-      if args.noimg == False:
-        readOutFiles.readFile(args.outfile,args.pixels)
+      if args.noimg == True: sys.exit(0)
+      readOutFiles.readFile(args.outfile,args.pixels)
+      if removeWhenDone: os.remove(args.outfile)
 
   # Video player
   elif args.type == 'video':

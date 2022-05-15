@@ -1,5 +1,5 @@
 # made for reading ASCII images
-import os, config
+import os
 
 def readFile(inFile,pixel):
     with open(inFile) as file:
@@ -7,5 +7,3 @@ def readFile(inFile,pixel):
             if (pixel in line) == False:
                 line = '' # some lines are basically empty but dont give a heck about size
             os.system(f"printf '{line}'")
-
-#readFile("./images/gamermoment.txt")

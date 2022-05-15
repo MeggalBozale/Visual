@@ -12,14 +12,23 @@ THE WRIST GAME
 '''
 import config
 
-def color(colors,text,end=config.resetColor,back=False,mode=8):
-  line = getTuple(colors,mode) # mode should be 8 or 16, 16 if a terminal support light colored stuff
+def color16(colors,text,end=config.resetColor,back=False):
+  line = getTuple(colors,16)
   if line == False:
-    line = getBestFit(colors,mode)
-  # Formatted as \x1b[ (foreground 38, background 48) ; 5 (256 colors) ; line number m
+    line = getBestFit(colors,16)
   if back: back = 4
   else: back = 3
-  return "{}[{}{}m{}{}".format(config.escapeChr,back,line,text,end)
+  if line > 8: back += 6; line -= 8
+  return f"{config.escapeChr}[{back}{line}m{text}{end}"
+
+def color8(colors,text,end=config.resetColor,back=False):
+  line = getTuple(colors,8)
+  if line == False:
+    line = getBestFit(colors,8)
+  if back: back = 4
+  else: back = 3
+  return f"{config.escapeChr}[{back}{line}m{text}{end}"
+
 
 def getTuple(colorTuple,mode):
   # Obtain the line number of a given color in case our desired one is in stock, otherwise return False

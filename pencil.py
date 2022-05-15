@@ -7,7 +7,7 @@ def color(rgb,text,support,end=config.resetColor,background = False):
   elif support == 3: return   pick256.color(rgb,text,False,end,background)
   elif support == 2: return   pickLow.color(rgb,text,      end,background,16)
   elif support == 1: return   pickLow.color(rgb,text,      end,background, 8)
-  else:              return  pickMono.print(rgb,text)
+  else:              return  pickMono.color(rgb,text)
 
 def write(input,end=config.newln):
   os.system("printf \'" + input + end + "\'")
